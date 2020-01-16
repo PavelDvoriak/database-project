@@ -12,7 +12,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/login.fxml"));
         VBox root = loader.load();
 //        LoginController controller = loader.getController();
 //        controller.initialise();
