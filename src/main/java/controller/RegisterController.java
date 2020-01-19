@@ -41,7 +41,7 @@ public class RegisterController {
 
         Errors errors = userService.checkRegistration(userName, password, passwordCheck, email, entityManager);
 
-        if(!errors.containErrors()) {
+        if (!errors.containErrors()) {
             userService.createNewUser(userName, password, email, entityManager);
         } else {
             MessageBox.showError("Registration failed", "Given attributes are invalid", errors.getErrors());

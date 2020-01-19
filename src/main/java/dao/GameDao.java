@@ -2,11 +2,8 @@ package dao;
 
 import model.Game;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.hibernate.exception.ConstraintViolationException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.RollbackException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,7 +14,7 @@ public class GameDao {
     }
 
     public Game saveGame(Game game, EntityManager em) throws JdbcSQLIntegrityConstraintViolationException {
-        if(game.getId() == null) {
+        if (game.getId() == null) {
             em.persist(game);
         } else if (!em.contains(game)) {
             game = em.merge(game);

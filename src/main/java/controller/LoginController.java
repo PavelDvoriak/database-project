@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.MessageBox;
+import model.User;
 import service.UserService;
 
 import javax.persistence.EntityManager;
@@ -40,6 +41,7 @@ public class LoginController {
     private PasswordField txtPassword;
 
     private UserService userService;
+    private User userToSign;
 
     public LoginController() {
         this.userService = new UserService(new UserDao());
@@ -51,7 +53,8 @@ public class LoginController {
         String pass = txtPassword.getText();
 
         try {
-            if (userService.checkLogin(uName, pass, em)) {
+            userToSign = userService.checkLogin(uName, pass, em);
+            if (userToSign != null) {
                 //get logged user interface here
                 login(uName);
 
@@ -99,7 +102,7 @@ public class LoginController {
         VBox root = loader.load();
 
         HomeController controller = loader.getController();
-        controller.initialise(uName);
+        controller.initialise(userToSign);
 
         Stage homeWindow = new Stage();
         Stage currentWindow = (Stage) btnLogin.getScene().getWindow();

@@ -27,7 +27,7 @@ public class Game {
     private LocalDate published;
 
     @Column(name = "AVG_RATING")
-    private double rating;
+    private Double rating;
 
     public Game() {
     }
@@ -74,37 +74,13 @@ public class Game {
         this.rating = rating;
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if(o == this) {
-            return true;
-        }
-
-        if(!(o instanceof  Game)) {
-            return false;
-        }
-
-        Game g = (Game) o;
-
-        if(g.getId() == id) {
-            return true;
-        }
-
-        if((g.getName().equals(name) && (g.getStudio().equals(studio) || g.getPublished().equals(published)))) {
-            return true;
-        }
-        return false;
-    }
-
-     */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        if(id.equals(game.id)) return true;
-        return  name.equals(game.name) &&
+        if (id.equals(game.id)) return true;
+        return name.equals(game.name) &&
                 Objects.equals(studio, game.studio) &&
                 Objects.equals(published, game.published);
     }

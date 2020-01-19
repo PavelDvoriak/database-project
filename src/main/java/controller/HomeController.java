@@ -20,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.Game;
+import model.User;
 import service.GameService;
 
 import javax.persistence.EntityManager;
@@ -39,14 +40,14 @@ public class HomeController {
     private ObservableList<Game> data;
     private GameService gameService;
     private Game selectedGame = null;
-    private String signedUser;
+    private User signedUser;
 
     public HomeController() {
         this.gameService = new GameService(new GameDao());
     }
 
-    public void initialise(String userName) {
-        signedUser = userName;
+    public void initialise(User user) {
+        signedUser = user;
         TableColumn<Game, String> columnName = new TableColumn<>("Name");
         columnName.setCellValueFactory(
                 new PropertyValueFactory<Game, String>("name"));
@@ -56,7 +57,7 @@ public class HomeController {
         TableColumn<Game, LocalDate> columnPublished = new TableColumn<>("Published");
         columnPublished.setCellValueFactory(
                 new PropertyValueFactory<Game, LocalDate>("published"));
-        TableColumn<Game, Double> columnRating = new TableColumn<>("Rating");
+        TableColumn<Game, Double> columnRating = new TableColumn<>("Average Rating");
         columnRating.setCellValueFactory(
                 new PropertyValueFactory<Game, Double>("rating"));
 
@@ -68,44 +69,53 @@ public class HomeController {
         tableGames.setItems(data);
         tableGames.getColumns().addAll(columnName, columnStudio, columnPublished, columnRating);
 
+        btnWriteReview.setDisable(true);
+
         em.close();
     }
 
 
     public void btnWriteReview_click(ActionEvent mouseEvent) {
-        System.out.println("You can click buttons. Impressive!");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/review.fxml"));
     }
 
     public void tableGames_click(MouseEvent mouseEvent) throws IOException {
-        if(mouseEvent.getClickCount() == 2) {
+
+        if (mouseEvent.getClickCount() == 2) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/review.fxml"));
             VBox root = loader.load();
+            ReviewController controller = loader.getController();
+            controller.initialise(signedUser, selectedGame);
 
             showWindow("Reviews", root);
         }
 
         Game clickedOn = tableGames.getSelectionModel().getSelectedItem();
 
-
-        if(clickedOn == null) {
+        if (clickedOn == null) {
             selectedGame = null;
             btnEditGame.setText("Add Game");
+            btnWriteReview.setDisable(true);
             tableGames.getSelectionModel().clearSelection();
         } else if (selectedGame == null) {
             selectedGame = clickedOn;
+            btnWriteReview.setDisable(false);
             btnEditGame.setText("Edit Game");
         } else if (selectedGame.equals(tableGames.getSelectionModel().getSelectedItem())) {
             selectedGame = null;
             btnEditGame.setText("Add Game");
+            btnWriteReview.setDisable(true);
             tableGames.getSelectionModel().clearSelection();
         } else {
             selectedGame = tableGames.getSelectionModel().getSelectedItem();
+            btnWriteReview.setDisable(false);
         }
     }
 
     Consumer<Game> addConsumer = result -> {
         data.add(result);
     };
+
     //TODO: make this smarter (enum / boolean)
     public void btnEditGame_click(ActionEvent actionEvent) {
         String buttonType = btnEditGame.getText().toLowerCase();
@@ -139,7 +149,7 @@ public class HomeController {
             Consumer<Game> deleteConsumer = result -> {
                 data.remove(result);
             };
-            controller.initEdit(selectedGame, addConsumer);
+            controller.initEdit(selectedGame, addConsumer, deleteConsumer);
             data.remove(selectedGame);
             showWindow("Edit game " + selectedGame.getName(), root);
         }

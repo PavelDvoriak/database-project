@@ -15,7 +15,7 @@ public class Errors {
     }
 
     public String getErrors() {
-        if(errorList.isEmpty()) {
+        if (errorList.isEmpty()) {
             return null;
         }
         return (String.join(System.lineSeparator(), errorList));

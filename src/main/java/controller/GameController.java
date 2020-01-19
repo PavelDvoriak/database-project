@@ -40,10 +40,10 @@ public class GameController {
     private Button btnAddGame;
     @FXML
     private Button cancelBtn;
-    
+
     private GameService gameService;
-    private Consumer onCompleteAdd;
-    private Consumer onCompleteDelete;
+    private Consumer<Game> onCompleteAdd;
+    private Consumer<Game> onCompleteDelete;
     private Game gameToEdit;
 
     public GameController() {
@@ -54,9 +54,10 @@ public class GameController {
         this.onCompleteAdd = consumer;
     }
 
-    public void initEdit(Game game, Consumer<Game> addConsumer) {
+    public void initEdit(Game game, Consumer<Game> addConsumer, Consumer<Game> deleteConsumer) {
         this.gameToEdit = game;
         this.onCompleteAdd = addConsumer;
+        this.onCompleteDelete = deleteConsumer;
         nameOriginal.setText(gameToEdit.getName());
         studioOriginal.setText(gameToEdit.getStudio());
         publishedOriginal.setText(gameToEdit.getPublished().toString());

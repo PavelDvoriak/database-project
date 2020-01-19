@@ -27,7 +27,8 @@ public class User {
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String uName, String pass, String email) {
         this.username = uName;
