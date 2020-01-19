@@ -24,7 +24,7 @@ public class UserDao {
         return user;
     }
 
-    public List<User> usersLookup(EntityManager em) {
+    public List<User> readAllUsers(EntityManager em) {
          return em.createQuery("from User", User.class).getResultList();
     }
 }

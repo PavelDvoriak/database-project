@@ -21,7 +21,7 @@ public class Errors {
         return (String.join(System.lineSeparator(), errorList));
     }
 
-    public boolean isErrors() {
+    public boolean containErrors() {
         return (!errorList.isEmpty());
     }
 }

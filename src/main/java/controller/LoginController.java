@@ -47,7 +47,7 @@ public class LoginController {
 
     public void btnLogin_click(MouseEvent mouseEvent) {
         EntityManager em = App.createEM();
-        String uName = txtUserName.getText();
+        String uName = txtUserName.getText().trim().toLowerCase();
         String pass = txtPassword.getText();
 
         try {
@@ -83,7 +83,6 @@ public class LoginController {
             // TODO - add alert
             e.printStackTrace();
         }
-        RegisterController controller = loader.getController();
 
         Stage owner = (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
         Stage registerWindow = new Stage();
@@ -100,12 +99,14 @@ public class LoginController {
         VBox root = loader.load();
 
         HomeController controller = loader.getController();
-        controller.initialise();
+        controller.initialise(uName);
 
         Stage homeWindow = new Stage();
+        Stage currentWindow = (Stage) btnLogin.getScene().getWindow();
 
         homeWindow.setScene(new Scene(root));
-        homeWindow.setTitle("GEMRVWR - " + uName + "logged in");
+        homeWindow.setTitle("GEMRVWR - " + uName + " logged in");
         homeWindow.show();
+        currentWindow.hide();
     }
 }

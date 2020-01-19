@@ -9,13 +9,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import model.Errors;
 import model.MessageBox;
-import model.User;
 import service.UserService;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterController {
     @FXML
@@ -38,14 +34,14 @@ public class RegisterController {
     public void btnRegister_click(ActionEvent actionEvent) {
         EntityManager entityManager = App.createEM();
 
-        String userName = txtUserName.getText();
+        String userName = txtUserName.getText().trim().toLowerCase();
         String password = txtPassword.getText();
         String passwordCheck = txtPasswordCheck.getText();
         String email = txtEmail.getText().toLowerCase();
 
-        Errors errors = userService.registerCheck(userName, password, passwordCheck, email, entityManager);
+        Errors errors = userService.checkRegistration(userName, password, passwordCheck, email, entityManager);
 
-        if(!errors.isErrors()) {
+        if(!errors.containErrors()) {
             userService.createNewUser(userName, password, email, entityManager);
         } else {
             MessageBox.showError("Registration failed", "Given attributes are invalid", errors.getErrors());

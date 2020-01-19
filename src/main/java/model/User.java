@@ -4,7 +4,8 @@ import javax.persistence.*;
 /* TODO:
     Override the equals, hashcode methods!
     Add more attributes - reviews, favorites, user photo*, last login*,...
-    Resolve adding users with same username
+    Resolve adding users with same username - done
+    Add user's account options - change user's data / delete account
  */
 
 @Entity

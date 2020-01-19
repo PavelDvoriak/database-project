@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public List<String> userNamesLookup(EntityManager em) {
-        List<User> users = userDao.usersLookup(em);
+        List<User> users = userDao.readAllUsers(em);
         List<String> result = new ArrayList<>();
 
         users.forEach(user -> {
@@ -51,7 +51,7 @@ public class UserService {
         }
     }
 
-    public Errors registerCheck(String uName, String pass, String passCheck, String email, EntityManager em)  {
+    public Errors checkRegistration(String uName, String pass, String passCheck, String email, EntityManager em)  {
         Errors errorList = new Errors();
 
         Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
