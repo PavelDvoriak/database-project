@@ -18,10 +18,9 @@ public class ReviewDao {
     }
 
     public List<Review> readReviewsByGame(Game gameToFind, EntityManager entityManager) {
-        List<Review> reviews = entityManager.createQuery("from Review r where r.game = ?1", Review.class)
+        return entityManager.createQuery("from Review r where r.game = ?1", Review.class)
                 .setParameter(1, gameToFind)
                 .getResultList();
-        return reviews;
 
     }
 

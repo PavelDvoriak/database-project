@@ -16,7 +16,7 @@ public class GameService {
         this.gameDao = gd;
     }
 
-    public List<Game> getAllGames(EntityManager em) {
+    public List getAllGames(EntityManager em) {
         return gameDao.readAllGames(em);
     }
 

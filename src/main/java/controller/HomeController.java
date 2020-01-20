@@ -57,7 +57,7 @@ public class HomeController {
         TableColumn<Game, LocalDate> columnPublished = new TableColumn<>("Published");
         columnPublished.setCellValueFactory(
                 new PropertyValueFactory<Game, LocalDate>("published"));
-        TableColumn<Game, Double> columnRating = new TableColumn<>("Average Rating");
+        TableColumn<Game, Double> columnRating = new TableColumn<>("Rating");
         columnRating.setCellValueFactory(
                 new PropertyValueFactory<Game, Double>("rating"));
 
