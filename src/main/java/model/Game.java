@@ -6,6 +6,13 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * An Entity class that defines Game objects
+ * and maps them with the GAME table in relational database using JPA Annotations.
+ *
+ * @author Pavel Dvoriak
+ * @version 20.01.2020
+ */
 @Entity
 @Table(name = "GAME")
 @Check(constraints = "studio NOT NULL OR published NOT NULL")
@@ -32,6 +39,14 @@ public class Game {
     public Game() {
     }
 
+    /**
+     * A constructor to create an instance of Game object
+     * with given attributes
+     *
+     * @param gName Name of the game
+     * @param studio Game Studio that developed the game
+     * @param published Game release date
+     */
     public Game(String gName, String studio, LocalDate published) {
         this.name = gName;
         this.studio = studio;
@@ -66,7 +81,7 @@ public class Game {
         this.published = published;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
@@ -74,6 +89,12 @@ public class Game {
         this.rating = rating;
     }
 
+    /**
+     * Method to determine under what circumstances are two Game objects equal.
+     *
+     * @param o An object to be evaluated
+     * @return True if objects are equal, false if not.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,6 +106,11 @@ public class Game {
                 Objects.equals(published, game.published);
     }
 
+    /**
+     * Method that returns calculated hash value of a Game object.
+     *
+     * @return Hash code of a Game object represented by number
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, name, studio, published);

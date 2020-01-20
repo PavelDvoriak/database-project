@@ -4,6 +4,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * An Entity class that defines Review objects
+ * and maps them with the REVIEW table in relational database using JPA Annotations.
+ *
+ * @author Pavel Dvoriak
+ * @version 20.01.2020
+ */
 @Entity
 @Table(name = "REVIEW")
 public class Review {
@@ -35,6 +42,15 @@ public class Review {
     public Review() {
     }
 
+    /**
+     * A constructor to create an instance of the Review object
+     * with given attributes
+     *
+     * @param rating User's rating of the Game object
+     * @param content Text content of the Review
+     * @param game Game, which the Review belongs to
+     * @param user User, whom the Review belongs to
+     */
     public Review(Double rating, String content, Game game, User user) {
         this.rating = rating;
         this.content = content;
@@ -87,6 +103,12 @@ public class Review {
         this.user = user;
     }
 
+    /**
+     * Method to determine under what circumstances are two Review objects equal.
+     *
+     * @param o An object to be evaluated
+     * @return True if objects are equal, false if not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,11 +122,21 @@ public class Review {
                 user.equals(review.user);
     }
 
+    /**
+     * Method that returns calculated hash value of a Review object.
+     *
+     * @return Hash code of a Review object represented by number
+     */
     @Override
     public int hashCode() {
         return Objects.hash(rating, content, timestamp, game, user);
     }
 
+    /**
+     * Method to determine how the text output of Review object looks like.
+     *
+     * @return Formatted text description of the Review object
+     */
     @Override
     public String toString() {
         return user.getUsername() + "\t (" + timestamp + ") rated: " + rating + " and wrote:" +

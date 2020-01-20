@@ -11,13 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * UserService class - Class that holds the business rules of the application.
+ * A layer between DAO and Controller - Database and GUI.
+ * Primarily handles logic of User objects.
+ *
+ * @author Pavel Dvoriak
+ * @version 20.01.2020
+ */
 public class UserService {
     private UserDao userDao;
 
+    /**
+     * A constructor to create an instance of UserService object.
+     * It assigns a userDao to connect the business and database layers.
+     *
+     * @param ud UserDao that handles database operations connected with User objects
+     */
     public UserService(UserDao ud) {
         this.userDao = ud;
     }
 
+    /**
+     * Method that creates an instance of User object
+     * and pass it to DAO to store in the database.
+     *
+     * @param uName User object attribute username
+     * @param password User object attribute password
+     * @param email User object attribute email
+     * @param em Entity Manager to create a transaction
+     */
     public void createNewUser(String uName, String password, String email, EntityManager em) {
         User user = new User(uName, password, email);
 
@@ -32,7 +55,13 @@ public class UserService {
         }
     }
 
-    public List<String> userNamesLookup(EntityManager em) {
+    /**
+     * Method to request a list of all stored usernames from DAO.
+     *
+     * @param em Entity Manager to pass to the DAO
+     * @return List of usernames stored in the database
+     */
+    public List<String> getAllUsernames(EntityManager em) {
         List<User> users = userDao.readAllUsers(em);
         List<String> result = new ArrayList<>();
 
@@ -42,7 +71,17 @@ public class UserService {
         return result;
     }
 
-    //add password hashing
+    /**
+     * Method that requests a User object stored in database based on its username attribute.
+     * Checks if the given password equals with the one stored in database for that User record.
+     * If it does return that User object, otherwise returns null
+     *
+     * @param uName username given by the User attempting to log into the application
+     * @param pass password given by the User attempting to log into the application
+     * @param em Entity Manager to pass to the DAO
+     * @return User object if the given attributes correspond, null if not
+     * @throws NoResultException In case there is no such User object in the database
+     */
     public User checkLogin(String uName, String pass, EntityManager em) throws NoResultException {
         User user = userDao.readUser(uName, em);
         if (user.getPassword().equals(pass)) {
@@ -52,6 +91,18 @@ public class UserService {
         }
     }
 
+    /**
+     * Method that performs several checks on the attributes
+     * given by the User during registration.
+     * Compares the attributes with designed Patterns
+     *
+     * @param uName Username given by a user during registration
+     * @param pass Password given by a user during registration
+     * @param passCheck Password check given by a user during registration
+     * @param email Email given by a user during registration
+     * @param em Entity Manager to pass to the DAO
+     * @return List of Errors, that is empty if attributes are correct
+     */
     public Errors checkRegistration(String uName, String pass, String passCheck, String email, EntityManager em) {
         Errors errorList = new Errors();
 
@@ -61,7 +112,7 @@ public class UserService {
         Pattern lowerCasePattern = Pattern.compile("[a-z]");
         Pattern noSpecialCharsPattern = Pattern.compile("[a-zA-Z0-9]");
 
-        List<String> usernames = userNamesLookup(em);
+        List<String> usernames = getAllUsernames(em);
 
         usernames.forEach(username -> {
             if (username.equals(uName)) {

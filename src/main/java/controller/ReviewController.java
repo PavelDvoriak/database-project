@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Game;
+import model.MessageBox;
 import model.Review;
 import model.User;
 import service.GameService;
@@ -16,8 +17,15 @@ import service.ReviewService;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.function.Consumer;
 
+/**
+ * ReviewController class - class that controls the Review GUI of the application.
+ * It manages an addition or browsing of a Review objects on GUI level.
+ * It is further implemented by review service, that is responsible for business rules
+ *
+ * @author Pavel Dvoriak
+ * @version 20.01.2020
+ */
 public class ReviewController {
     @FXML
     ListView<String> listReviews;
@@ -41,14 +49,28 @@ public class ReviewController {
     private ReviewService reviewService;
     private GameService gameService;
     private ObservableList<Review> items;
+    private HomeController parentController;
 
+    /**
+     * Constructor that creates an instance of this controller.
+     * It then assigns needed service for self
+     */
     public ReviewController() {
         this.reviewService = new ReviewService(new ReviewDao());
     }
 
-    public void initialise(User user, Game game) {
+    /**
+     * Method that initialise needed containers and data for
+     * browsing or adding a new Review
+     *
+     * @param user Signed User
+     * @param game Reviewed Game
+     * @param controller Controller of a home GUI to apply rating changes in the Game table
+     */
+    public void initialise(User user, Game game, HomeController controller) {
         this.signedUser = user;
         this.ratedGame = game;
+        this.parentController = controller;
 
         lblAuthor.setText(signedUser.getUsername());
         lblGameName.setText(ratedGame.getName());
@@ -69,19 +91,45 @@ public class ReviewController {
         entityManager.close();
     }
 
+    /**
+     * Method that closes current window and returns to
+     * the home GUI after Back button is clicked
+     *
+     * @param actionEvent
+     */
     public void backBtn_click(ActionEvent actionEvent) {
         Stage currentWindow = (Stage) backBtn.getScene().getWindow();
         currentWindow.close();
     }
 
+    /**
+     * Method that follows the trigger of Add button.
+     * When the event is fired it requests creation of a Review on a
+     * Service-level method
+     * and persist on a DAO-level
+     * Also applying changes to the Game rating in Game table in home GUI.
+     *
+     * @param actionEvent
+     */
     public void btnAddReview_click(ActionEvent actionEvent) {
         EntityManager em = App.createEM();
         double rating = reviewRatingSlider.getValue();
         String content = reviewContent.getText();
-        Review review = reviewService.createNewReview(ratedGame, signedUser, rating, content, em);
+        Review review;
+        try {
+            review = reviewService.createNewReview(ratedGame, signedUser, rating, content, em);
+        } catch (NullPointerException e) {
+            MessageBox.showError("Error", "Couldn't create the review", "An error has occured while storing the review\nTry again or contact support");
+            return;
+        }
+
         reviewService.calculateAvgRating(ratedGame, em);
         em.close();
+        parentController.refreshTable();
         listReviews.getItems().add(review.toString());
+
+        Stage currentWindow = (Stage) btnAddReview.getScene().getWindow();
+        currentWindow.close();
     }
 
 }

@@ -41,7 +41,7 @@
                         <Insets right="30.0" />
                      </GridPane.margin>
                      <buttons>
-                        <Button fx:id="btnWriteReview" alignment="CENTER" mnemonicParsing="false" onAction="#btnWriteReview_click" prefHeight="25.0" prefWidth="200.0" text="Add your review">
+                        <Button fx:id="btnShowReviews" alignment="CENTER" disable="true" mnemonicParsing="false" onAction="#btnShowReviews_click" prefHeight="25.0" prefWidth="200.0" text="Show reviews">
                            <font>
                               <Font name="SansSerif Regular" size="14.0" />
                            </font>

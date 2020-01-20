@@ -25,9 +25,16 @@ import java.io.IOException;
 
 /* TODO:
     Add pasword hashing
-    on login shutdown former window
  */
 
+/**
+ * LoginController class - class that controls part of GUI - login.
+ * It contains objects used for controlling the scene.
+ * It is further implemented by user service, that is responsible for business rules
+ *
+ * @author Pavel Dvoriak
+ * @version 20.01.2020
+ */
 public class LoginController {
     @FXML
     private Label lblInfo;
@@ -43,10 +50,21 @@ public class LoginController {
     private UserService userService;
     private User userToSign;
 
+    /**
+     * Constructor that creates an instance of this controller.
+     * It then assigns needed service for self
+     */
     public LoginController() {
         this.userService = new UserService(new UserDao());
     }
 
+    /**
+     * Method that implements functionality of login button, if it is clicked.
+     * Performs basic checks if given attributes are valid.
+     * If they are it calls function to log the user in.
+     *
+     * @param mouseEvent
+     */
     public void btnLogin_click(MouseEvent mouseEvent) {
         EntityManager em = App.createEM();
         String uName = txtUserName.getText().trim().toLowerCase();
@@ -55,10 +73,7 @@ public class LoginController {
         try {
             userToSign = userService.checkLogin(uName, pass, em);
             if (userToSign != null) {
-                //get logged user interface here
                 login(uName);
-
-
             } else {
                 MessageBox.showError("Login failed", "Wrong username/password combination",
                         "Try again or create free account\nTo do that just click the register button");
@@ -74,9 +89,13 @@ public class LoginController {
         em.close();
     }
 
+    /**
+     * Method that implements functionality of register button, if it is clicked.
+     * Loads the registration GUI and inits modality.
+     *
+     * @param actionEvent
+     */
     public void btnRegister_click(ActionEvent actionEvent) {
-        //load register.fxml
-        System.out.println("U clicked register! Cool");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/register.fxml"));
 
         VBox root = null;
@@ -97,6 +116,13 @@ public class LoginController {
         registerWindow.show();
     }
 
+    /**
+     * Method is used for user login. It takes username as parameter and loads corresponding GUI.
+     * It also creates mentioned GUI controller and passes signed user object to it.
+     *
+     * @param uName Username of the user that is logging in
+     * @throws IOException Exception is thrown when the respective fxml file cannot be found
+     */
     private void login(String uName) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/home.fxml"));
         VBox root = loader.load();
