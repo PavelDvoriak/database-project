@@ -5,6 +5,7 @@ import org.hibernate.annotations.Check;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * An Entity class that defines Game objects
@@ -15,7 +16,6 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "GAME")
-@Check(constraints = "studio NOT NULL OR published NOT NULL")
 public class Game {
 
     @Id
@@ -35,6 +35,9 @@ public class Game {
 
     @Column(name = "AVG_RATING")
     private Double rating;
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.REMOVE)
+    private Set<Review> reviews;
 
     public Game() {
     }
@@ -100,7 +103,7 @@ public class Game {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game = (Game) o;
-        if (id.equals(game.id)) return true;
+//        if (id.equals(game.id)) return true;
         return name.equals(game.name) &&
                 Objects.equals(studio, game.studio) &&
                 Objects.equals(published, game.published);

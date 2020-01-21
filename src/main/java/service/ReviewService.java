@@ -102,6 +102,10 @@ public class ReviewService {
         public Double findMedian (List < Double > list) {
             Double median;
 
+            if(list.size() < 3) {
+                return 0.0;
+            }
+
             Collections.sort(list);
             if (list.size() % 2 == 0) {
                 median = ((list.get(list.size() / 2)) + ((list.get((list.size() / 2) + 1)))) / 2;
